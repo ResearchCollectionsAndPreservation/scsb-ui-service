@@ -63,6 +63,9 @@ public class MultiCASAndOAuthSecurityConfiguration {
     @Value("${" + ScsbConstants.CSP_VALUE + "}")
     private String cspValue;
 
+    @Value("${" + ScsbConstants.FRAME_ANCESTOR_VALUE + "}")
+    private String frameAncestorValue;
+
     @Autowired
     private CASPropertyProvider casPropertyProvider;
 
@@ -98,7 +101,7 @@ public class MultiCASAndOAuthSecurityConfiguration {
         SessionManagementConfigurer<HttpSecurity> httpSecuritySessionManagementConfigurer = http.sessionManagement();
         httpSecuritySessionManagementConfigurer.invalidSessionUrl("/home");
         if (cspEnable) {
-            http.headers(headers -> headers.contentSecurityPolicy(contentSecurityPolicy -> contentSecurityPolicy.policyDirectives( "default-src "+ scsbUiUrl + " " + cspValue )));
+            http.headers(headers -> headers.contentSecurityPolicy(contentSecurityPolicy -> contentSecurityPolicy.policyDirectives( "default-src "+ scsbUiUrl + " " + cspValue   + "; frame-ancestors " + " " + frameAncestorValue)));
         }
         http.logout().logoutUrl(ScsbConstants.LOG_USER_LOGOUT_URL).logoutSuccessUrl("/").invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
